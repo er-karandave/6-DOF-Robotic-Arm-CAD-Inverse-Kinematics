@@ -199,7 +199,7 @@ The solver iteratively converges to a solution with typical accuracy of **< 0.5m
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/er-karandave/6-DOF-Robotic-Arm-IK.git
+git clone [https://github.com/er-karandave/6-DOF-Robotic-Arm-IK.git](https://github.com/er-karandave/6-DOF-Robotic-Arm-CAD-Inverse-Kinematics.git)
 cd 6-DOF-Robotic-Arm-IK
 
 
