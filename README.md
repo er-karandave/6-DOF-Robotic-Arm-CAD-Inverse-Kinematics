@@ -73,6 +73,8 @@ pytest tests/test_jacobian_ik.py::TestPerformance -v
 # Stop on first failure (useful during development)
 pytest tests/ -x
 
+New-Item software\ik_solver\trajectory_planner.py -ItemType File -Force
+
 
 
 

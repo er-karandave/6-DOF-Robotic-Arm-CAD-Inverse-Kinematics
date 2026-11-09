@@ -60,13 +60,50 @@ class ArmVisualizer:
             
         return np.array(x), np.array(y), np.array(z)
 
-    def interpolate(self, q_start: np.ndarray, q_end: np.ndarray, steps: int = 50) -> list[np.ndarray]:
-        """Generate smooth intermediate joint configurations."""
-        return [q_start + (q_end - q_start) * (i / steps) for i in range(steps + 1)]
+    # def interpolate(self, q_start: np.ndarray, q_end: np.ndarray, steps: int = 50) -> list[np.ndarray]:
+    #     """Generate smooth intermediate joint configurations."""
+    #     return [q_start + (q_end - q_start) * (i / steps) for i in range(steps + 1)]
 
-    def animate(self, q_start: np.ndarray, q_end: np.ndarray):
-        """Create and display the animation."""
-        trajectory = self.interpolate(q_start, q_end, steps=60)
+    # def animate(self, q_start: np.ndarray, q_end: np.ndarray):
+    #     """Create and display the animation."""
+    #     trajectory = self.interpolate(q_start, q_end, steps=60)
+        
+    #     # Get target end-effector position for the red star
+    #     T_target = self.ik.forward_kinematics(q_end)
+    #     self.target_point.set_data([T_target[0, 3]], [T_target[1, 3]])
+    #     self.target_point.set_3d_properties([T_target[2, 3]])
+
+    #     def update(frame):
+    #         q = trajectory[frame]
+    #         x, y, z = self.get_link_positions(q)
+    #         self.links.set_data(x, y)
+    #         self.links.set_3d_properties(z)
+    #         self.ax.set_title(f'6-DOF Robotic Arm — Step {frame}/{len(trajectory)-1}')
+    #         return self.links,
+
+    #     ani = FuncAnimation(self.fig, update, frames=len(trajectory), interval=30, blit=False)
+    #     plt.show()
+
+    # REPLACE the old interpolate method with this:
+    def interpolate(self, q_start: np.ndarray, q_end: np.ndarray, duration: float = 3.0, fps: int = 30) -> list[np.ndarray]:
+        """Generate smooth quintic trajectory waypoints."""
+        from software.ik_solver.trajectory_planner import MultiJointTrajectoryPlanner
+        
+        planner = MultiJointTrajectoryPlanner(q_start, q_end, duration)
+        num_frames = int(duration * fps)
+        
+        trajectory = []
+        for i in range(num_frames + 1):
+            t = i / fps
+            q_t = planner.evaluate(t)
+            trajectory.append(q_t)
+            
+        return trajectory
+
+    # UPDATE the animate method to use the new duration parameter:
+    def animate(self, q_start: np.ndarray, q_end: np.ndarray, duration: float = 3.0):
+        """Create and display the smooth animation."""
+        trajectory = self.interpolate(q_start, q_end, duration=duration, fps=30)
         
         # Get target end-effector position for the red star
         T_target = self.ik.forward_kinematics(q_end)
@@ -78,25 +115,37 @@ class ArmVisualizer:
             x, y, z = self.get_link_positions(q)
             self.links.set_data(x, y)
             self.links.set_3d_properties(z)
-            self.ax.set_title(f'6-DOF Robotic Arm — Step {frame}/{len(trajectory)-1}')
+            
+            # Calculate current time for the title
+            current_t = (frame / len(trajectory)) * duration
+            self.ax.set_title(f'6-DOF Arm — Quintic Trajectory (t={current_t:.1f}s)')
             return self.links,
 
-        ani = FuncAnimation(self.fig, update, frames=len(trajectory), interval=30, blit=False)
+        ani = FuncAnimation(self.fig, update, frames=len(trajectory), interval=33, blit=False) # ~30fps
         plt.show()
 
+# def main():
+#     print("Initializing 3D Visualizer...")
+#     vis = ArmVisualizer()
+    
+#     # Start at home
+#     q_home = np.zeros(N_JOINTS)
+    
+#     # Target from our previous successful IK run
+#     q_target = np.deg2rad([20.0, -2.31, 39.94, -32.63, 25.0, -15.0])
+    
+#     print("Starting animation. Close the window to exit.")
+#     vis.animate(q_home, q_target)
 
 def main():
-    print("Initializing 3D Visualizer...")
+    print("Initializing 3D Visualizer with Quintic Trajectory...")
     vis = ArmVisualizer()
     
-    # Start at home
-    q_home = np.zeros(N_JOINTS)
-    
-    # Target from our previous successful IK run
+    q_home = np.zeros(6)
     q_target = np.deg2rad([20.0, -2.31, 39.94, -32.63, 25.0, -15.0])
     
-    print("Starting animation. Close the window to exit.")
-    vis.animate(q_home, q_target)
+    print("Starting smooth animation. Close the window to exit.")
+    vis.animate(q_home, q_target, duration=3.0) # 3-second smooth move
 
 
 if __name__ == "__main__":
