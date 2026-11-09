@@ -44,11 +44,11 @@ class JacobianIK:
     def __init__(
         self,
         dh_params: list[DHParameter] | None = None,
-        damping: float = 0.05,
-        max_iterations: int = 200,
-        pos_tolerance: float = 1e-4,   # 0.1 mm
-        rot_tolerance: float = 1e-3,   # ~0.057 deg
-        max_step: float = 0.15,        # rad per iteration
+        damping: float = 0.02,              # ← Changed from 0.05 to 0.02
+        max_iterations: int = 300,          # ← Changed from 200 to 300
+        pos_tolerance: float = 1e-4,        # 0.1 mm
+        rot_tolerance: float = 1e-3,        # ~0.057 deg
+        max_step: float = 0.25,             # ← Changed from 0.15 to 0.25 rad
         position_only: bool = False,
     ):
         self.dh = dh_params if dh_params is not None else DEFAULT_DH_PARAMS

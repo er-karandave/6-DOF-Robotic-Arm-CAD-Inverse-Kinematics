@@ -1,0 +1,41 @@
+software/visualization/__pycache__/__init__.cpython-313.pyc
+software/visualization/__pycache__/arm_visualizer.cpython-313.pyc
+# Created by venv; see https://docs.python.org/3/library/venv.html
+# *
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# PlatformIO / ESP32
+.pio/
+.pioenvs/
+.piolibdeps/
+.pyc
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Large CAD binaries (keep STEP/STL out of git; use Releases or Git LFS)
+*.SLDPRT
+*.SLDASM
+*.stl
+*.step
+*.stp
+
+# Output
+docs/media/*.mp4
+software/ik_solver/__pycache__/jacobian_ik.cpython-313.pyc
+software/ik_solver/__pycache__/jacobian_ik.cpython-313.pyc

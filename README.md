@@ -6,6 +6,8 @@ I took some help of AI for documentation, Learning, Research and Brainstorming.
  go to cd path\to\your\6-DOF-Robotic-Arm-IK
  python -m venv venv
     pip install numpy matplotlib pyserial scipy
+    pip install pytest pytest-cov
+    pip freeze > requirements.txt
   pass command in CMD =>        venv\Scripts\activate 
   or in powershell => venv\Scripts\Activate.ps1
   python -m software.ik_solver.jacobian_ik
@@ -52,10 +54,24 @@ If it stops running ven then pass =>  Set-ExecutionPolicy -ExecutionPolicy Remot
 │       └── include/
 │           └── config.h
 └── tests/
-    ├── test_fk_ik_consistency.py
-    └── test_trajectory_smoothness.py
+        ├── __init__.py
+        ├── conftest.py
+        ├── test_jacobian_ik.py
+        └── test_jacobian_correctness.py
 
 
+
+# Run all tests with verbose output
+pytest tests/ -v
+
+# Run with coverage report (shows which lines of code are tested)
+pytest tests/ --cov=software.ik_solver --cov-report=term-missing
+
+# Run just one test class
+pytest tests/test_jacobian_ik.py::TestPerformance -v
+
+# Stop on first failure (useful during development)
+pytest tests/ -x
 
 
 
