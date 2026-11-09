@@ -3,6 +3,12 @@
 SolidWorks, Python, C++, Raspberry Pi, Jacobian Matrices, PWM Motor Control, 3D Printing.
 
 I took some help of AI for documentation, Learning, Research and Brainstorming.
+ go to cd path\to\your\6-DOF-Robotic-Arm-IK
+  pass command in CMD =>        venv\Scripts\activate 
+  or in powershell => venv\Scripts\Activate.ps1
+  python -m software.ik_solver.jacobian_ik
+
+If it stops running ven then pass =>  Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser  => in terminal
 
 
 
